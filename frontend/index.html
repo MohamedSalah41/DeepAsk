@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Docs Q&A</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📄 Personal Docs Q&amp;A</h1>
+    <p class="subtitle">Upload your documents, then ask anything about them.</p>
+
+    <!-- Upload Section -->
+    <section class="card">
+      <h2>Upload a Document</h2>
+      <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.md" />
+      <button onclick="uploadFile()">Upload &amp; Ingest</button>
+      <p id="uploadStatus" class="status"></p>
+    </section>
+
+    <!-- Ask Section -->
+    <section class="card">
+      <h2>Ask a Question</h2>
+      <textarea id="questionInput" rows="3" placeholder="e.g. What are the cancellation terms?"></textarea>
+      <button onclick="askQuestion()">Ask</button>
+      <div id="answerBox" class="answer-box hidden">
+        <h3>Answer</h3>
+        <p id="answerText"></p>
+        <p id="sourcesText" class="sources"></p>
+      </div>
+    </section>
+
+    <!-- Docs List -->
+    <section class="card">
+      <h2>Uploaded Documents</h2>
+      <button onclick="loadDocs()">Refresh List</button>
+      <ul id="docsList"></ul>
+    </section>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
