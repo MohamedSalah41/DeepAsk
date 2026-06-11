@@ -1,5 +1,5 @@
 /* ── Config ─────────────────────────────────────────────────────── */
-const API = "/api";
+const API = "http://localhost:8000/api";
 
 /* ── State ───────────────────────────────────────────────────────── */
 let isThinking = false;
@@ -442,3 +442,19 @@ document.addEventListener("keydown", e => {
 
 /* ── Init ───────────────────────────────────────────────────────── */
 inputEl.focus();
+
+/* ── Mobile Nav Toggle ───────────────────────────────────────────── */
+const navHamburger = document.getElementById("navHamburger");
+const navLinks = document.getElementById("navLinks");
+if (navHamburger && navLinks) {
+  navHamburger.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    navHamburger.setAttribute("aria-expanded", isOpen);
+  });
+  navLinks.querySelectorAll(".nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      navHamburger.setAttribute("aria-expanded", "false");
+    });
+  });
+}

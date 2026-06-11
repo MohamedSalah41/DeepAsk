@@ -69,6 +69,10 @@
   box-shadow: 0 4px 12px rgba(91,94,244,.35);
   transform: translateY(-1px);
 }
+.btn-primary:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
 
 /* ── Canvas Wrapper ──────────────────────────────────────────────── */
 .mindmap-canvas-wrapper {
@@ -109,7 +113,7 @@
   justify-content: center;
   color: var(--text-muted);
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
   box-shadow: var(--shadow-sm);
 }
 .mindmap-btn:hover {
@@ -119,6 +123,12 @@
   box-shadow: var(--shadow);
 }
 .mindmap-btn:active { transform: scale(.95); }
+.mindmap-btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  background: var(--brand-light);
+  color: var(--brand);
+}
 
 /* ── CTA Button ──────────────────────────────────────────────────── */
 .mindmap-cta {
@@ -141,7 +151,7 @@
   border-radius: 99px;
   text-decoration: none;
   box-shadow: 0 6px 24px rgba(91,94,244,.4);
-  transition: all .2s ease;
+  transition: background var(--transition), box-shadow var(--transition), transform 150ms ease;
 }
 .btn-cta:hover {
   background: var(--brand-dark);
@@ -149,6 +159,10 @@
   transform: translateY(-2px);
 }
 .btn-cta:active { transform: translateY(0); }
+.btn-cta:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
 
 /* ── SVG Graph Styles ────────────────────────────────────────────── */
 .mindmap-canvas .link {
@@ -156,7 +170,7 @@
   stroke-width: 2;
   fill: none;
   opacity: .6;
-  transition: opacity .2s ease, stroke-width .2s ease;
+  transition: opacity var(--transition), stroke-width var(--transition);
 }
 .mindmap-canvas .link.chunk-link {
   stroke: #6366f1;
@@ -165,7 +179,7 @@
 }
 .mindmap-canvas .link:hover { opacity: 1; stroke-width: 3; }
 
-.mindmap-canvas .node-group { cursor: pointer; transition: transform .15s ease; }
+.mindmap-canvas .node-group { cursor: pointer; transition: transform var(--transition); }
 .mindmap-canvas .node-group:hover { transform: scale(1.05); }
 .mindmap-canvas .node-group.dragging { cursor: grabbing; }
 
@@ -174,7 +188,7 @@
   stroke: var(--brand);
   stroke-width: 2.5;
   filter: drop-shadow(0 2px 8px rgba(0,0,0,.12));
-  transition: fill .2s ease, stroke .2s ease, filter .2s ease;
+  transition: fill var(--transition), stroke var(--transition), filter var(--transition);
 }
 .mindmap-canvas .node-group:hover .node-circle {
   fill: var(--brand-light);

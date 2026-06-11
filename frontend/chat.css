@@ -194,11 +194,15 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background .15s ease, transform .1s ease, opacity .15s ease;
+  transition: background var(--transition), transform 150ms ease, opacity var(--transition);
 }
 .chat-send-btn:hover:not(:disabled) { background: var(--brand-dark); transform: scale(1.05); }
 .chat-send-btn:active:not(:disabled) { transform: scale(.95); }
 .chat-send-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.chat-send-btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
 
 .chat-hint {
   margin-top: .5rem;
@@ -309,7 +313,7 @@
   stroke-width: 2;
   fill: none;
   opacity: .55;
-  transition: opacity .2s;
+  transition: opacity var(--transition);
 }
 .source-canvas .s-link:hover { opacity: 1; }
 
@@ -321,7 +325,7 @@
   stroke: var(--brand);
   stroke-width: 2.5;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,.1));
-  transition: fill .15s, stroke .15s;
+  transition: fill var(--transition), stroke var(--transition);
 }
 .source-canvas .s-circle.s-root {
   fill: var(--brand);
@@ -445,9 +449,13 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all .15s ease;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
 }
 .chunk-close-btn:hover { background: var(--error-bg); color: var(--error); border-color: var(--error-border); }
+.chunk-close-btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
 
 .chunk-popup-body {
   padding: 1.25rem 1.5rem;
@@ -468,17 +476,20 @@
 @media (max-width: 860px) {
   .chat-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 340px;
+    grid-template-rows: 1fr 320px;
     height: calc(100vh - 56px);
   }
   .chat-panel { border-right: none; border-bottom: 1px solid var(--border); }
-  .source-panel { height: 340px; }
+  .source-panel { height: 320px; }
 }
 
 @media (max-width: 560px) {
+  .chat-layout { grid-template-rows: 1fr 240px; }
+  .source-panel { height: 240px; }
   .chat-messages { padding: 1rem; }
   .chat-input-bar { padding: .75rem 1rem 1rem; }
   .msg-bubble { max-width: 85%; font-size: .875rem; }
   .chunk-overlay { padding: 1rem; align-items: flex-end; }
   .chunk-popup { max-height: 80vh; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .chat-hint { display: none; }
 }

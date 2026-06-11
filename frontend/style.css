@@ -54,7 +54,7 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
 }
 
 .nav-inner {
-  max-width: 800px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 0 1.5rem;
   height: 56px;
@@ -73,6 +73,8 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   color: var(--brand);
   letter-spacing: -.01em;
   user-select: none;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
 .nav-links {
@@ -93,8 +95,32 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   text-decoration: none;
   transition: background var(--transition), color var(--transition);
 }
-.nav-link:hover { background: var(--brand-light); color: var(--brand); }
+.nav-link:hover  { background: var(--brand-light); color: var(--brand); }
 .nav-link.active { background: var(--brand-light); color: var(--brand); }
+.nav-link:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+/* Hamburger (mobile only) */
+.nav-hamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+.nav-hamburger:hover { background: var(--brand-light); color: var(--brand); }
+.nav-hamburger:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
 /* ── Layout ──────────────────────────────────────────────────────── */
 .container {
@@ -437,7 +463,7 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   border-radius: 99px;
   text-decoration: none;
   box-shadow: 0 4px 20px rgba(91,94,244,.45);
-  transition: background var(--transition), box-shadow var(--transition), transform .15s ease;
+  transition: background var(--transition), box-shadow var(--transition), transform 150ms ease;
 }
 .btn-cta:hover {
   background: var(--brand-dark);
@@ -445,6 +471,10 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   transform: translateY(-1px);
 }
 .btn-cta:active { transform: translateY(0); }
+.btn-cta:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
 
 /* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 560px) {
@@ -452,5 +482,23 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   .card { padding: 1.25rem; }
   .drop-zone { padding: 2rem 1.25rem; }
   .sticky-cta { bottom: 1rem; right: 1rem; }
-  .nav-link span { display: none; }
+
+  /* Hamburger nav */
+  .nav-hamburger { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: .5rem 1rem .75rem;
+    flex-direction: column;
+    gap: .25rem;
+    box-shadow: var(--shadow);
+    z-index: 99;
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: .6rem .75rem; font-size: .9rem; }
 }

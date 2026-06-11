@@ -1,5 +1,5 @@
 /* ── Config ─────────────────────────────────────────────────────── */
-const API = "/api";
+const API = "http://localhost:8000/api";
 const STORAGE_KEY = "docmind_chunks";
 
 /* ── State ───────────────────────────────────────────────────────── */
@@ -275,19 +275,43 @@ document.getElementById("btnZoomIn").addEventListener("click", zoomIn);
 document.getElementById("btnZoomOut").addEventListener("click", zoomOut);
 
 /* ── Load & Init ─────────────────────────────────────────────────── */
-async function loadDocs() {
-  try {
-    const res = await fetch(`${API}/docs-list`);
-    if (!res.ok) throw new Error("fetch failed");
-    const data = await res.json();
-    return data.documents || [];
-  } catch {
-    return [];
-  }
-}
 
 async function initGraph() {
-  const docs = await loadDocs();
+  let docs;
+  let fetchFailed = false;
+
+  try {
+    const res = await fetch(`${API}/docs-list`);
+    if (!res.ok) throw new Error("bad response");
+    const data = await res.json();
+    docs = data.documents || [];
+  } catch {
+    fetchFailed = true;
+    docs = [];
+  }
+
+  if (fetchFailed) {
+    emptyEl.style.display = "flex";
+    canvasWrapperEl.style.display = "none";
+    // Replace empty state content with an error message
+    emptyEl.innerHTML = `
+      <div class="mindmap-empty-icon" style="background: linear-gradient(135deg,#fef2f2,#fee2e2);" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="1" y1="1" x2="23" y2="23"/>
+          <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+          <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+          <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+          <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+          <line x1="12" y1="20" x2="12.01" y2="20"/>
+        </svg>
+      </div>
+      <h1 class="mindmap-empty-title" style="color:#dc2626">Server unreachable</h1>
+      <p class="mindmap-empty-subtitle">Couldn't load your documents. Make sure the backend is running, then refresh the page.</p>
+      <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+    `;
+    return;
+  }
 
   if (docs.length === 0) {
     emptyEl.style.display = "flex";
@@ -316,3 +340,19 @@ window.addEventListener("resize", () => {
 });
 
 initGraph();
+
+/* ── Mobile Nav Toggle ───────────────────────────────────────────── */
+const navHamburger = document.getElementById("navHamburger");
+const navLinks = document.getElementById("navLinks");
+if (navHamburger && navLinks) {
+  navHamburger.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    navHamburger.setAttribute("aria-expanded", isOpen);
+  });
+  navLinks.querySelectorAll(".nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      navHamburger.setAttribute("aria-expanded", "false");
+    });
+  });
+}

@@ -1,5 +1,5 @@
 /* ── Config ─────────────────────────────────────────────────────── */
-const API = "/api";
+const API = "http://localhost:8000/api";
 
 /* Allowed file types (client-side guard) */
 const ALLOWED_TYPES = {
@@ -240,3 +240,20 @@ async function deleteDoc(btn) {
 
 /* ── Init ───────────────────────────────────────────────────────── */
 loadDocs();
+
+/* ── Mobile Nav Toggle ───────────────────────────────────────────── */
+const navHamburger = document.getElementById("navHamburger");
+const navLinks = document.getElementById("navLinks");
+if (navHamburger && navLinks) {
+  navHamburger.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    navHamburger.setAttribute("aria-expanded", isOpen);
+  });
+  // Close on link click
+  navLinks.querySelectorAll(".nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      navHamburger.setAttribute("aria-expanded", "false");
+    });
+  });
+}
