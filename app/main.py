@@ -34,3 +34,15 @@ app.include_router(router, prefix="/api")
 async def root():
     from fastapi.responses import FileResponse
     return FileResponse("frontend/index.html")
+
+
+@app.get("/mindmap", include_in_schema=False)
+async def mindmap():
+    from fastapi.responses import FileResponse
+    return FileResponse("frontend/mindmap.html")
+
+
+@app.get("/chat", include_in_schema=False)
+async def chat():
+    from fastapi.responses import FileResponse
+    return FileResponse("frontend/chat.html")

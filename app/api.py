@@ -28,9 +28,15 @@ class QuestionRequest(BaseModel):
     question: str
 
 
+class SourceChunk(BaseModel):
+    filename: str
+    chunk_index: int
+    text: str
+
+
 class AnswerResponse(BaseModel):
     answer: str
-    sources: list[str]
+    sources: list[SourceChunk]
 
 
 # ---------- endpoints ----------

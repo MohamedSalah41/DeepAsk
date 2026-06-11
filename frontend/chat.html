@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DocMind — Chat</title>
   <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/chat.css" />
 </head>
 <body>
 
@@ -32,15 +33,101 @@
     </div>
   </nav>
 
-  <!-- ── Main ───────────────────────────────────────────────── -->
-  <main class="page-upload">
-    <div class="container">
-      <header class="page-header">
-        <h1>Chat — Coming Soon</h1>
-        <p class="page-subtitle">This page will be built in Task 3.</p>
-      </header>
-    </div>
+  <!-- ── Split Layout ───────────────────────────────────────── -->
+  <main class="chat-layout">
+
+    <!-- LEFT — Chat panel -->
+    <section class="chat-panel" aria-label="Chat">
+
+      <div class="chat-header">
+        <h1 class="chat-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat with your docs
+        </h1>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Conversation">
+        <!-- Welcome message -->
+        <div class="msg msg-assistant msg-welcome">
+          <div class="msg-avatar" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
+          </div>
+          <div class="msg-bubble">
+            <p>Hi! Ask me anything about your uploaded documents. I'll answer using only what's in them and show you exactly which parts I used.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input bar -->
+      <div class="chat-input-bar">
+        <div class="chat-input-wrapper">
+          <textarea
+            id="chatInput"
+            class="chat-input"
+            placeholder="Ask a question about your documents…"
+            rows="1"
+            aria-label="Your question"
+            autocomplete="off"
+            spellcheck="true"
+          ></textarea>
+          <button
+            id="chatSend"
+            class="chat-send-btn"
+            aria-label="Send message"
+            title="Send (Enter)"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <p class="chat-hint">Press <kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> for new line</p>
+      </div>
+    </section>
+
+    <!-- RIGHT — Source map panel -->
+    <section class="source-panel" aria-label="Source map">
+
+      <div class="source-header">
+        <h2 class="source-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/></svg>
+          Source Map
+        </h2>
+        <span class="source-badge" id="sourceBadge" aria-live="polite"></span>
+      </div>
+
+      <!-- Placeholder (before any question) -->
+      <div class="source-placeholder" id="sourcePlaceholder">
+        <div class="source-placeholder-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/></svg>
+        </div>
+        <p class="source-placeholder-title">Ask a question</p>
+        <p class="source-placeholder-sub">Sources appear here after each answer — you'll see exactly which chunks the AI used.</p>
+      </div>
+
+      <!-- SVG canvas (shown after first answer) -->
+      <svg id="sourceCanvas" class="source-canvas" style="display:none;" aria-hidden="true"></svg>
+
+    </section>
   </main>
 
+  <!-- ── Chunk Popup ─────────────────────────────────────────── -->
+  <div class="chunk-overlay" id="chunkOverlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-hidden="true">
+    <div class="chunk-popup">
+      <div class="chunk-popup-header">
+        <div>
+          <p class="chunk-popup-label" id="popupLabel"></p>
+          <h3 class="chunk-popup-title" id="popupTitle"></h3>
+        </div>
+        <button class="chunk-close-btn" id="chunkCloseBtn" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="chunk-popup-body">
+        <pre class="chunk-text" id="popupText"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/chat.js"></script>
 </body>
 </html>
