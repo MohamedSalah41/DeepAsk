@@ -56,15 +56,27 @@ def get_qa_chain() -> RetrievalQA:
 def answer_question(question: str) -> dict:
     """
     Run a question through the RAG pipeline.
-    Returns the answer and the source documents used.
+    Returns the answer and rich source objects (filename, chunk_index, text).
     """
     chain = get_qa_chain()
     result = chain.invoke({"query": question})
 
-    sources = list({
-        doc.metadata.get("source", "unknown")
-        for doc in result.get("source_documents", [])
-    })
+    seen = set()
+    sources = []
+    for i, doc in enumerate(result.get("source_documents", [])):
+        filename = doc.metadata.get("source", "unknown")
+        text = doc.page_content.strip()
+        # Use position in result list as chunk_index (1-based)
+        chunk_index = i + 1
+        dedup_key = (filename, text[:120])
+        if dedup_key in seen:
+            continue
+        seen.add(dedup_key)
+        sources.append({
+            "filename": filename,
+            "chunk_index": chunk_index,
+            "text": text,
+        })
 
     return {
         "answer": result["result"],

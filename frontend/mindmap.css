@@ -1,0 +1,246 @@
+/* ── Mind Map Page ───────────────────────────────────────────────── */
+.page-mindmap {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+/* ── Empty State ─────────────────────────────────────────────────── */
+.mindmap-empty {
+  text-align: center;
+  max-width: 420px;
+  padding: 2rem;
+}
+
+.mindmap-empty-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--brand-light) 0%, #bbf7d0 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: var(--brand);
+}
+
+.mindmap-empty-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: .5rem;
+}
+
+.mindmap-empty-subtitle {
+  font-size: .95rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: .925rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(22,163,74,.25);
+}
+.btn-primary:hover {
+  background: var(--brand-dark);
+  box-shadow: 0 4px 12px rgba(22,163,74,.35);
+  transform: translateY(-1px);
+}
+.btn-primary:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
+
+/* ── Canvas Wrapper ──────────────────────────────────────────────── */
+.mindmap-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #fafbfc 0%, var(--bg) 100%);
+}
+
+.mindmap-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+.mindmap-canvas.dragging { cursor: grabbing; }
+
+/* ── Controls ────────────────────────────────────────────────────── */
+.mindmap-controls {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  z-index: 10;
+}
+
+.mindmap-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.mindmap-btn:hover {
+  background: var(--brand-light);
+  color: var(--brand);
+  border-color: var(--brand);
+  box-shadow: var(--shadow);
+}
+.mindmap-btn:active { transform: scale(.95); }
+.mindmap-btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+/* ── CTA Button ──────────────────────────────────────────────────── */
+.mindmap-cta {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .85rem 1.75rem;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  font-size: .95rem;
+  border-radius: 99px;
+  text-decoration: none;
+  box-shadow: 0 6px 24px rgba(22,163,74,.35);
+  transition: background var(--transition), box-shadow var(--transition), transform 150ms ease;
+}
+.btn-cta:hover {
+  background: var(--brand-dark);
+  box-shadow: 0 8px 32px rgba(22,163,74,.45);
+  transform: translateY(-2px);
+}
+.btn-cta:active { transform: translateY(0); }
+.btn-cta:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
+
+/* ── SVG Graph Styles ────────────────────────────────────────────── */
+.mindmap-canvas .link {
+  stroke: #10b981;
+  stroke-width: 2;
+  fill: none;
+  opacity: .6;
+  transition: opacity var(--transition), stroke-width var(--transition);
+}
+.mindmap-canvas .link.chunk-link {
+  stroke: #4ade80;
+  stroke-width: 1.5;
+  opacity: .4;
+}
+.mindmap-canvas .link:hover { opacity: 1; stroke-width: 3; }
+
+.mindmap-canvas .node-group { cursor: pointer; transition: transform var(--transition); }
+.mindmap-canvas .node-group:hover { transform: scale(1.05); }
+.mindmap-canvas .node-group.dragging { cursor: grabbing; }
+
+.mindmap-canvas .node-circle {
+  fill: #fff;
+  stroke: var(--brand);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.12));
+  transition: fill var(--transition), stroke var(--transition), filter var(--transition);
+}
+.mindmap-canvas .node-group:hover .node-circle {
+  fill: var(--brand-light);
+  stroke: var(--brand-dark);
+  filter: drop-shadow(0 4px 16px rgba(22,163,74,.25));
+}
+
+.mindmap-canvas .node-circle.root {
+  fill: var(--brand);
+  stroke: var(--brand-dark);
+  stroke-width: 3;
+}
+.mindmap-canvas .node-group:hover .node-circle.root {
+  fill: var(--brand-dark);
+}
+
+.mindmap-canvas .node-circle.chunk {
+  fill: #f0fdf4;
+  stroke: #4ade80;
+  stroke-width: 2;
+}
+.mindmap-canvas .node-group:hover .node-circle.chunk {
+  fill: #dcfce7;
+  stroke: #16a34a;
+}
+
+.mindmap-canvas .node-label {
+  fill: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  text-anchor: middle;
+  pointer-events: none;
+  user-select: none;
+}
+.mindmap-canvas .node-label.root {
+  font-size: 16px;
+  font-weight: 700;
+  fill: #fff;
+}
+.mindmap-canvas .node-label.chunk {
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--text-muted);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .mindmap-controls {
+    top: 1rem;
+    right: 1rem;
+  }
+  .mindmap-btn { width: 40px; height: 40px; }
+  .mindmap-cta { bottom: 1.5rem; }
+  .btn-cta { font-size: .85rem; padding: .75rem 1.5rem; }
+}

@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-# 🟢 Ask Me
+# 🟢 DeepAsk
 
 ### Your documents. Your questions. Private, local, instant.
 
@@ -100,7 +100,7 @@ uvicorn app.main:app --reload
 ## Project Structure
 
 ```
-ask-me/
+deepask/
 ├── app/
 │   ├── main.py       ← FastAPI entry point
 │   ├── api.py        ← Routes
