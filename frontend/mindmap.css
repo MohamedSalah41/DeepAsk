@@ -21,7 +21,7 @@
 .mindmap-empty-icon {
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, var(--brand-light) 0%, #e0e7ff 100%);
+  background: linear-gradient(135deg, var(--brand-light) 0%, #bbf7d0 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -62,11 +62,11 @@
 .btn-primary {
   background: var(--brand);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(91,94,244,.25);
+  box-shadow: 0 2px 8px rgba(22,163,74,.25);
 }
 .btn-primary:hover {
   background: var(--brand-dark);
-  box-shadow: 0 4px 12px rgba(91,94,244,.35);
+  box-shadow: 0 4px 12px rgba(22,163,74,.35);
   transform: translateY(-1px);
 }
 .btn-primary:focus-visible {
@@ -150,12 +150,12 @@
   font-size: .95rem;
   border-radius: 99px;
   text-decoration: none;
-  box-shadow: 0 6px 24px rgba(91,94,244,.4);
+  box-shadow: 0 6px 24px rgba(22,163,74,.35);
   transition: background var(--transition), box-shadow var(--transition), transform 150ms ease;
 }
 .btn-cta:hover {
   background: var(--brand-dark);
-  box-shadow: 0 8px 32px rgba(91,94,244,.5);
+  box-shadow: 0 8px 32px rgba(22,163,74,.45);
   transform: translateY(-2px);
 }
 .btn-cta:active { transform: translateY(0); }
@@ -173,7 +173,7 @@
   transition: opacity var(--transition), stroke-width var(--transition);
 }
 .mindmap-canvas .link.chunk-link {
-  stroke: #6366f1;
+  stroke: #4ade80;
   stroke-width: 1.5;
   opacity: .4;
 }
@@ -193,7 +193,7 @@
 .mindmap-canvas .node-group:hover .node-circle {
   fill: var(--brand-light);
   stroke: var(--brand-dark);
-  filter: drop-shadow(0 4px 16px rgba(91,94,244,.25));
+  filter: drop-shadow(0 4px 16px rgba(22,163,74,.25));
 }
 
 .mindmap-canvas .node-circle.root {
@@ -206,13 +206,13 @@
 }
 
 .mindmap-canvas .node-circle.chunk {
-  fill: #f0f4ff;
-  stroke: #a5b4fc;
+  fill: #f0fdf4;
+  stroke: #4ade80;
   stroke-width: 2;
 }
 .mindmap-canvas .node-group:hover .node-circle.chunk {
-  fill: #e0e7ff;
-  stroke: #818cf8;
+  fill: #dcfce7;
+  stroke: #16a34a;
 }
 
 .mindmap-canvas .node-label {

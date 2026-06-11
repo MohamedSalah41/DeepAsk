@@ -2,10 +2,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --brand:        #5b5ef4;
-  --brand-dark:   #4444d4;
-  --brand-light:  #ededff;
-  --success:      #16a34a;
+  --brand:        #16a34a;
+  --brand-dark:   #15803d;
+  --brand-light:  #dcfce7;
+  --success:      #15803d;
   --success-bg:   #f0fdf4;
   --success-border: #bbf7d0;
   --error:        #dc2626;
@@ -17,10 +17,10 @@
   --text:         #111827;
   --text-muted:   #6b7280;
   --text-light:   #9ca3af;
-  --bg:           #f8f9fc;
+  --bg:           #f8faf8;
   --surface:      #ffffff;
   --border:       #e5e7eb;
-  --border-focus: #5b5ef4;
+  --border-focus: #16a34a;
   --radius-sm:    8px;
   --radius:       12px;
   --radius-lg:    16px;
@@ -69,13 +69,15 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   align-items: center;
   gap: .45rem;
   font-weight: 700;
-  font-size: 1rem;
-  color: var(--brand);
-  letter-spacing: -.01em;
+  font-size: 1.05rem;
+  letter-spacing: -.02em;
   user-select: none;
   text-decoration: none;
   flex-shrink: 0;
+  color: var(--text);
 }
+.nav-logo .logo-deep { color: var(--brand); }
+.nav-logo .logo-ask  { color: var(--text); }
 
 .nav-links {
   display: flex;
@@ -210,7 +212,7 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   transition: background var(--transition);
 }
 .drop-zone:hover .drop-icon,
-.drop-zone.drag-over .drop-icon { background: #dddefe; }
+.drop-zone.drag-over .drop-icon { background: #bbf7d0; }
 
 .drop-primary {
   font-weight: 600;
@@ -334,7 +336,7 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   background: var(--bg);
   transition: border-color var(--transition), box-shadow var(--transition);
 }
-.doc-item:hover { border-color: #c7d2fe; box-shadow: var(--shadow-sm); }
+.doc-item:hover { border-color: #bbf7d0; box-shadow: var(--shadow-sm); }
 
 .doc-icon {
   width: 38px;
@@ -462,12 +464,12 @@ h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
   font-size: .925rem;
   border-radius: 99px;
   text-decoration: none;
-  box-shadow: 0 4px 20px rgba(91,94,244,.45);
+  box-shadow: 0 4px 20px rgba(22,163,74,.35);
   transition: background var(--transition), box-shadow var(--transition), transform 150ms ease;
 }
 .btn-cta:hover {
   background: var(--brand-dark);
-  box-shadow: 0 6px 28px rgba(91,94,244,.55);
+  box-shadow: 0 6px 28px rgba(22,163,74,.45);
   transform: translateY(-1px);
 }
 .btn-cta:active { transform: translateY(0); }
