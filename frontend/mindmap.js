@@ -1,6 +1,6 @@
 /* ── Config ─────────────────────────────────────────────────────── */
 const API = "http://localhost:8000/api";
-const STORAGE_KEY = "docmind_chunks";
+const STORAGE_KEY = "deepask_chunks";
 
 /* ── State ───────────────────────────────────────────────────────── */
 let graphData = { nodes: [], links: [] };

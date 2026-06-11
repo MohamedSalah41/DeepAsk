@@ -1,4 +1,4 @@
-# Personal Docs Q&A — System Overview
+# Personal Docs Q&A — DeepAsk System Overview
 
 ---
 
@@ -14,7 +14,7 @@ A RAG (Retrieval-Augmented Generation) system that lets you:
 ## Tree Architecture
 
 ```
--wht-is-the----rag/
+-deepask/
 │
 ├── app/                        ← Python backend (FastAPI)
 │   ├── __init__.py

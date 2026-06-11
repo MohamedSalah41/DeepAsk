@@ -1,4 +1,4 @@
-# Frontend — Files & API Communication
+# DeepAsk — Frontend Files & API Communication
 
 Three files make up the entire frontend. No framework, no build step.
 

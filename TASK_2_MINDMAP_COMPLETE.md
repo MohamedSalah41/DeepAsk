@@ -73,7 +73,7 @@
 - Rebuild graph on expand/collapse, recalculate forces, re-render
 
 ### Persistence
-- Upload page stores `{ "filename.pdf": 42 }` in `localStorage` key `docmind_chunks`
+- Upload page stores `{ "filename.pdf": 42 }` in `localStorage` key `deepask_chunks`
 - Mind map reads this data to know how many chunk nodes to create
 - Delete operation clears localStorage to stay in sync
 

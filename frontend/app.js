@@ -92,7 +92,7 @@ async function uploadFile(file) {
       showFeedback("success", `"${file.name}" uploaded — ${data.chunks_stored} chunks indexed.`);
       
       // Store chunk count for mind map
-      const STORAGE_KEY = "docmind_chunks";
+      const STORAGE_KEY = "deepask_chunks";
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
       stored[file.name] = data.chunks_stored;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
@@ -228,7 +228,7 @@ async function deleteDoc(btn) {
     const res = await fetch(`${API}/reset`, { method: "DELETE" });
     if (!res.ok) throw new Error("delete failed");
     // Backend wipes everything — clear localStorage too
-    localStorage.removeItem("docmind_chunks");
+    localStorage.removeItem("deepask_chunks");
     loadDocs();
   } catch {
     // Restore row on failure
