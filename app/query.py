@@ -1,15 +1,15 @@
 """
 Query pipeline.
-Takes a user question, retrieves relevant chunks from ChromaDB,
+Takes a user question, retrieves relevant chunks from FAISS,
 and generates an answer using the LLM.
 """
 
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
 from app.ingest import get_vector_store
-from app.config import LLM_MODEL, TOP_K_RESULTS, GOOGLE_API_KEY
+from app.config import TOP_K_RESULTS
+from app import providers
 
 
 PROMPT_TEMPLATE = """You are a helpful assistant that answers questions strictly based on the provided documents.
@@ -32,11 +32,7 @@ def get_qa_chain() -> RetrievalQA:
 
     retriever = vector_store.as_retriever(search_kwargs={"k": TOP_K_RESULTS})
 
-    llm = ChatGoogleGenerativeAI(
-        model=LLM_MODEL,
-        temperature=0,
-        google_api_key=GOOGLE_API_KEY,
-    )
+    llm = providers.get_llm()
 
     prompt = PromptTemplate(
         template=PROMPT_TEMPLATE,

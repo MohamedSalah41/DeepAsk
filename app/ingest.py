@@ -1,6 +1,6 @@
 """
 Document ingestion pipeline.
-Handles loading, splitting, embedding, and storing documents in ChromaDB.
+Handles loading, splitting, embedding, and storing documents in FAISS.
 """
 
 import os
@@ -10,17 +10,12 @@ from typing import List
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.schema import Document
 
-from app.config import (
-    CHROMA_DB_PATH,
-    UPLOAD_DIR,
-    CHUNK_SIZE,
-    CHUNK_OVERLAP,
-    EMBEDDING_MODEL,
-    GOOGLE_API_KEY,
-)
+from app.config import CHROMA_DB_PATH, UPLOAD_DIR, CHUNK_SIZE, CHUNK_OVERLAP
+from app import providers
+
+FAISS_INDEX_PATH = CHROMA_DB_PATH
 
 
 def load_document(file_path: str) -> List[Document]:
@@ -49,19 +44,9 @@ def split_documents(documents: List[Document]) -> List[Document]:
     return splitter.split_documents(documents)
 
 
-FAISS_INDEX_PATH = CHROMA_DB_PATH  # reuse same config key, now points to FAISS index folder
-
-
-def get_embeddings() -> GoogleGenerativeAIEmbeddings:
-    return GoogleGenerativeAIEmbeddings(
-        model=EMBEDDING_MODEL,
-        google_api_key=GOOGLE_API_KEY,
-    )
-
-
 def get_vector_store() -> FAISS:
     """Load existing FAISS index from disk, or raise if it doesn't exist yet."""
-    embeddings = get_embeddings()
+    embeddings = providers.get_embeddings()
     if not os.path.exists(os.path.join(FAISS_INDEX_PATH, "index.faiss")):
         raise FileNotFoundError(
             "No documents have been ingested yet. Please upload a document first."
@@ -86,7 +71,7 @@ def ingest_file(file_path: str) -> int:
     for chunk in chunks:
         chunk.metadata["source"] = source_name
 
-    embeddings = get_embeddings()
+    embeddings = providers.get_embeddings()
     os.makedirs(FAISS_INDEX_PATH, exist_ok=True)
 
     # If an index already exists, load and add to it; otherwise create fresh
