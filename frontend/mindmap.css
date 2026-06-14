@@ -179,9 +179,17 @@
 }
 .mindmap-canvas .link:hover { opacity: 1; stroke-width: 3; }
 
-.mindmap-canvas .node-group { cursor: pointer; transition: transform var(--transition); }
-.mindmap-canvas .node-group:hover { transform: scale(1.05); }
+.mindmap-canvas .node-group { cursor: pointer; }
 .mindmap-canvas .node-group.dragging { cursor: grabbing; }
+
+.mindmap-canvas .node-group .node-circle {
+  transition: fill var(--transition), stroke var(--transition), filter var(--transition), transform var(--transition);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.mindmap-canvas .node-group:hover .node-circle {
+  transform: scale(1.08);
+}
 
 .mindmap-canvas .node-circle {
   fill: #fff;
