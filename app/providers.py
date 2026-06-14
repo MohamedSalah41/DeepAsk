@@ -29,7 +29,7 @@ def get_embeddings():
         from langchain_community.embeddings import HuggingFaceEmbeddings
         return HuggingFaceEmbeddings(model_name=SENTENCE_TRANSFORMER_MODEL)
     else:
-        from langchain_community.embeddings import OllamaEmbeddings
+        from langchain_ollama import OllamaEmbeddings
         return OllamaEmbeddings(
             base_url=OLLAMA_BASE_URL,
             model=OLLAMA_EMBED_MODEL,
@@ -50,7 +50,7 @@ def get_llm():
             temperature=0,
         )
     else:
-        from langchain_community.chat_models import ChatOllama
+        from langchain_ollama import ChatOllama
         return ChatOllama(
             base_url=OLLAMA_BASE_URL,
             model=OLLAMA_LLM_MODEL,
