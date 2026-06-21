@@ -4,7 +4,6 @@ Takes a user question, retrieves relevant chunks from FAISS,
 and generates an answer using the LLM.
 """
 
-from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
 from app.ingest import get_vector_store
@@ -12,30 +11,35 @@ from app.config import TOP_K_RESULTS, RELEVANCE_SCORE_THRESHOLD
 from app import providers
 
 
-PROMPT_TEMPLATE = """You are a helpful assistant that answers questions strictly based on the provided documents.
-- If the answer is found in the documents, answer clearly and concisely.
-- If the question is too vague, a typo, or not a real question (e.g. "ih", "ok", "test"), politely ask the user to clarify or ask a proper question.
-- If the topic exists in the documents but the specific detail is not there, say what you DO know about the topic from the documents.
-- If the topic is completely absent from the documents (e.g. rating a resume, opinions, general knowledge), say: "I couldn't find that in the uploaded documents. This system only answers based on your uploaded files."
+PROMPT_TEMPLATE = """You are a helpful assistant that answers questions based strictly on the provided document excerpts.
+Each excerpt is labeled with its source file in [Source: filename] tags.
 
-Context:
+Rules:
+- Answer only from the provided excerpts. Do not use prior knowledge.
+- If multiple sources are present, state which source your answer comes from.
+- If the answer requires combining two passages, do so explicitly and cite both.
+- If the topic exists in the documents but the specific detail is not there, say what you DO know from the excerpts.
+- If the question is too vague, a typo, or not a real question (e.g. "ih", "ok", "test"), politely ask the user to clarify.
+- If the answer is not in any excerpt, say: "I couldn't find that in the uploaded documents."
+
+Document excerpts:
 {context}
 
 Question: {question}
 
-Answer:"""
+Answer (cite the source file):"""
 
 
-def get_qa_chain() -> RetrievalQA:
-    """Build and return the RetrievalQA chain."""
+def answer_question(question: str) -> dict:
+    """
+    Run a question through the RAG pipeline.
+    Returns the answer and rich source objects (filename, chunk_index, text).
+    """
     try:
         vector_store = get_vector_store()
     except FileNotFoundError as e:
         raise RuntimeError(str(e))
 
-    # Use similarity_score_threshold to filter out irrelevant chunks.
-    # This prevents the LLM from receiving unrelated content when no good
-    # match exists (e.g. asking about a resume pulls HTML/CSS chunks).
     retriever = vector_store.as_retriever(
         search_type="similarity_score_threshold",
         search_kwargs={
@@ -44,37 +48,34 @@ def get_qa_chain() -> RetrievalQA:
         },
     )
 
-    llm = providers.get_llm()
+    source_docs = retriever.invoke(question)
 
+    # Build labeled context so the LLM knows which file each chunk came from
+    labeled_context = ""
+    for doc in source_docs:
+        fname = doc.metadata.get("source", "unknown")
+        labeled_context += f"\n\n[Source: {fname}]\n{doc.page_content.strip()}"
+
+    llm = providers.get_llm()
     prompt = PromptTemplate(
         template=PROMPT_TEMPLATE,
         input_variables=["context", "question"],
     )
 
-    chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",
-        retriever=retriever,
-        return_source_documents=True,
-        chain_type_kwargs={"prompt": prompt},
+    formatted_prompt = prompt.format(
+        context=labeled_context.strip() if labeled_context else "No relevant excerpts found.",
+        question=question,
     )
-    return chain
 
-
-def answer_question(question: str) -> dict:
-    """
-    Run a question through the RAG pipeline.
-    Returns the answer and rich source objects (filename, chunk_index, text).
-    """
-    chain = get_qa_chain()
-    result = chain.invoke({"query": question})
+    answer = llm.invoke(formatted_prompt)
+    # Handle both string and AIMessage responses
+    answer_text = answer.content if hasattr(answer, "content") else str(answer)
 
     seen = set()
     sources = []
-    for i, doc in enumerate(result.get("source_documents", [])):
+    for i, doc in enumerate(source_docs):
         filename = doc.metadata.get("source", "unknown")
         text = doc.page_content.strip()
-        # Use position in result list as chunk_index (1-based)
         chunk_index = i + 1
         dedup_key = (filename, text[:120])
         if dedup_key in seen:
@@ -87,6 +88,6 @@ def answer_question(question: str) -> dict:
         })
 
     return {
-        "answer": result["result"],
+        "answer": answer_text,
         "sources": sources,
     }
