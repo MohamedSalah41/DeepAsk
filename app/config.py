@@ -9,6 +9,10 @@ UPLOAD_DIR = os.getenv("UPLOAD_DIR", "./data/uploads")
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))
 TOP_K_RESULTS = int(os.getenv("TOP_K_RESULTS", "5"))
+# Minimum similarity score for a chunk to be included in context.
+# Chunks below this threshold are discarded so the LLM doesn't get fed
+# unrelated content. Range: 0.0–1.0 (higher = stricter).
+RELEVANCE_SCORE_THRESHOLD = float(os.getenv("RELEVANCE_SCORE_THRESHOLD", "0.2"))
 
 # ---------- Groq (cloud) ----------
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
